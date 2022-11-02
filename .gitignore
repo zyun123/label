@@ -1,0 +1,15 @@
+*.pyc
+*.txt
+*.json
+
+*.png
+*.svg
+build/
+*.pth
+*.jpg
+*.npy
+*.gif
+
+*.zip
+.env
+.vscode

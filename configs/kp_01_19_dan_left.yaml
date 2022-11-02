@@ -1,0 +1,36 @@
+_BASE_: "Base-Keypoint-RCNN-FPN.yaml"
+MODEL:
+  ROI_KEYPOINT_HEAD: 
+    NUM_KEYPOINTS: 19
+  # WEIGHTS: "/mnt/data/outputs/models_base/model_0000999.pth"
+  WEIGHTS: "/mnt/data/outputs/model_final_04e291keypoints_50.pkl"
+  RESNETS: 
+    # DEPTH: 50
+    DEPTH: 50
+DATALOADER:
+  NUM_WORKERS: 4
+SOLVER:
+  IMS_PER_BATCH: 4
+  # BASE_LR: 0.0005
+  BASE_LR: 0.0005
+  REFERENCE_WORLD_SIZE: 2
+  STEPS: (400, 600)
+  MAX_ITER: 60000
+  CHECKPOINT_PERIOD: 2000
+OUTPUT_DIR: "/mnt/data/outputs/models_01_dan_left"  
+
+DATASETS:
+  TRAIN: ("sytrain",)
+  TEST: ("sytest",)
+TEST:
+  EVAL_PERIOD: 200
+INPUT:
+  # RANDOM_FLIP: "vertical"
+  RANDOM_FLIP: "none"
+  ROTATION_ANGLES: (0)
+
+  # MIN_SIZE_TRAIN: (640, 672,720 704, 736, 768, 800)  
+  MIN_SIZE_TEST: 1080
+  MAX_SIZE_TEST: 1920 
+  MIN_SIZE_TRAIN: (1080,)
+  MAX_SIZE_TRAIN: 1920

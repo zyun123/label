@@ -1,0 +1,28 @@
+DATALOADER:
+  NUM_WORKERS: 4
+DATASETS:
+  TEST: ('middle_down_wai_test',)
+  TRAIN: ('middle_down_wai_train',)
+INPUT:
+  MAX_SIZE_TEST: 1280
+  MAX_SIZE_TRAIN: 1280
+  MIN_SIZE_TEST: 720
+  MIN_SIZE_TRAIN: (720,)
+  RANDOM_FLIP: none
+MODEL:
+  RESNETS:
+    DEPTH: 50
+  ROI_KEYPOINT_HEAD:
+    NUM_KEYPOINTS: 90
+  WEIGHTS: /mnt/dlData/model_final_04e291keypoints_50.pkl
+OUTPUT_DIR: /mnt/dlData/EightModelOutputs/models/2021_01_28/middle_down_wai
+SOLVER:
+  BASE_LR: 0.0005
+  CHECKPOINT_PERIOD: 2000
+  IMS_PER_BATCH: 8
+  MAX_ITER: 8000
+  REFERENCE_WORLD_SIZE: 2
+  STEPS: (6400, 7200)
+TEST:
+  EVAL_PERIOD: 2000
+_BASE_: Base-Keypoint-RCNN-FPN.yaml

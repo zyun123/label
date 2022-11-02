@@ -1,0 +1,28 @@
+DATALOADER:
+  NUM_WORKERS: 4
+DATASETS:
+  TEST: ('left_up_nei_test',)
+  TRAIN: ('left_up_nei_train',)
+INPUT:
+  MAX_SIZE_TEST: 1280
+  MAX_SIZE_TRAIN: 1280
+  MIN_SIZE_TEST: 720
+  MIN_SIZE_TRAIN: (720,)
+  RANDOM_FLIP: none
+MODEL:
+  RESNETS:
+    DEPTH: 50
+  ROI_KEYPOINT_HEAD:
+    NUM_KEYPOINTS: 19
+  WEIGHTS: /mnt/dlData/samples/models/model_final_04e291keypoints_50.pkl
+OUTPUT_DIR: /mnt/dlData/EightModelOutputs/models/2021_03_04_dataset/left_up_nei
+SOLVER:
+  BASE_LR: 0.001
+  CHECKPOINT_PERIOD: 2000
+  IMS_PER_BATCH: 4
+  MAX_ITER: 8000
+  REFERENCE_WORLD_SIZE: 2
+  STEPS: (6400, 7200)
+TEST:
+  EVAL_PERIOD: 2000
+_BASE_: Base-Keypoint-RCNN-FPN.yaml

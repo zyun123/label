@@ -1,0 +1,28 @@
+DATALOADER:
+  NUM_WORKERS: 0
+DATASETS:
+  TEST: ('right_foot_middle_down_nei_test',)
+  TRAIN: ('right_foot_middle_down_nei_train',)
+INPUT:
+  MAX_SIZE_TEST: 320
+  MAX_SIZE_TRAIN: 320
+  MIN_SIZE_TEST: 180
+  MIN_SIZE_TRAIN: (180,)
+  RANDOM_FLIP: none
+MODEL:
+  RESNETS:
+    DEPTH: 50
+  ROI_KEYPOINT_HEAD:
+    NUM_KEYPOINTS: 8
+  WEIGHTS: /mnt/dlData/samples/models/model_final_04e291keypoints_50.pkl
+OUTPUT_DIR: /mnt/dlData/HFoutputs/models/2021_01_28/right_foot_middle_down_nei
+SOLVER:
+  BASE_LR: 0.0005
+  CHECKPOINT_PERIOD: 2000
+  IMS_PER_BATCH: 4
+  MAX_ITER: 8000
+  REFERENCE_WORLD_SIZE: 2
+  STEPS: (6400, 7200)
+TEST:
+  EVAL_PERIOD: 200
+_BASE_: Base-Keypoint-RCNN-FPN.yaml
