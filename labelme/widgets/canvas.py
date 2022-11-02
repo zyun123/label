@@ -656,7 +656,7 @@ class Canvas(QtWidgets.QWidget):
         for shape in self.shapes:
             label = shape.label
             font = self._painter.font()
-            print("shezhi  zihao")  #set font size
+            # print("shezhi  zihao")  #set font size
             font.setPixelSize(5)
             p.setFont(font)
             p.drawText(shape.points[0].x(),shape.points[0].y(),label)   #在每个关键点上drawtext
