@@ -2008,7 +2008,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.endMove(copy=False)
         self.setDirty()
 
-    def openDirDialog(self, _value=False, dirpath=None):
+    def openDirDialog(self, _value=False, dirpath="/911G/data"):
+        if not os.path.exists(dirpath):
+            dirpath = None
         if not self.mayContinue():
             return
 
@@ -2016,9 +2018,10 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.lastOpenDir and osp.exists(self.lastOpenDir):
             defaultOpenDirPath = self.lastOpenDir
         else:
-            defaultOpenDirPath = (
-                osp.dirname(self.filename) if self.filename else "."
-            )
+            if not dirpath:
+                defaultOpenDirPath = (
+                    osp.dirname(self.filename) if self.filename else "."
+                )
 
         targetDirPath = str(
             QtWidgets.QFileDialog.getExistingDirectory(
