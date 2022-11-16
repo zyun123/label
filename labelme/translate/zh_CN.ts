@@ -21,6 +21,11 @@
 <context>
     <name>MainWindow</name>
     <message>
+        <location filename="../app.py" line="81"/>
+        <source>Fillter</source>
+        <translation>过滤</translation>
+    </message>
+    <message>
         <location filename="../app.py" line="91"/>
         <source>Flags</source>
         <translation>标记</translation>

@@ -12,7 +12,7 @@ from qtpy import QtCore
 from qtpy.QtCore import Qt
 from qtpy import QtGui
 from qtpy import QtWidgets
-# import partial
+
 from labelme import __appname__
 from labelme import PY2
 from labelme import QT5
@@ -61,7 +61,6 @@ class MainWindow(QtWidgets.QMainWindow):
         output_file=None,
         output_dir=None,
     ):
-        self.jldict = {}
 
         self.modelsBox = None
         # self.fillComboBox()
@@ -124,27 +123,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.labelList = LabelListWidget()
         
         self.lastOpenDir = None
-        self.fillter_dock = QtWidgets.QDockWidget(self.tr("Fillter"),self)
-        self.listwidget = QtWidgets.QListWidget()
-        self.fillter_dock.setObjectName("Fillter")
-        self.fillter_dock.setWidget(self.listwidget)
 
         self.flag_dock = self.flag_widget = None
-        self.flag_dock = QtWidgets.QDockWidget(self.tr("Flags"), self)  #label界面上的标记
+        self.flag_dock = QtWidgets.QDockWidget(self.tr("Flags"), self)
         self.flag_dock.setObjectName("Flags")
         self.flag_widget = QtWidgets.QListWidget()
         if config["flags"]:
             self.loadFlags({k: False for k in config["flags"]})
         self.flag_dock.setWidget(self.flag_widget)
-        # self.flag_dock.setVisible(False)
         self.flag_widget.itemChanged.connect(self.setDirty)
 
         self.labelList.itemSelectionChanged.connect(self.labelSelectionChanged)
         self.labelList.itemDoubleClicked.connect(self.editLabel)
-        #多边形标签 选中item改变状态
-        self.labelList.itemChanged.connect(self.labelItemChanged)  
+        self.labelList.itemChanged.connect(self.labelItemChanged)
         self.labelList.itemDropped.connect(self.labelOrderChanged)
-        #labelme界面上的多边形标签
         self.shape_dock = QtWidgets.QDockWidget(
             self.tr("Polygon Labels"), self
         )
@@ -164,16 +156,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.uniqLabelList.addItem(item)
                 rgb = self._get_rgb_by_label(label)
                 self.uniqLabelList.setItemLabel(item, label, rgb)
-
-
-        #labelme界面上的标签列表
-        self.label_dock = QtWidgets.QDockWidget(self.tr(u"Label List"), self)  
+        self.label_dock = QtWidgets.QDockWidget(self.tr(u"Label List"), self)
         self.label_dock.setObjectName(u"Label List")
         self.label_dock.setWidget(self.uniqLabelList)
 
         self.fileSearch = QtWidgets.QLineEdit()
-
-        #labelme界面上的 按文件名检索
         self.fileSearch.setPlaceholderText(self.tr("Search Filename"))
         self.fileSearch.textChanged.connect(self.fileSearchChanged)
         self.fileListWidget = QtWidgets.QListWidget()
@@ -192,7 +179,6 @@ class MainWindow(QtWidgets.QMainWindow):
         fileListLayout.addWidget(self.modelsBox)
         self.modelsBox.addItems(modelNames)
 
-        #labelme界面上文件列表
         self.file_dock = QtWidgets.QDockWidget(self.tr(u"File List"), self)
         self.file_dock.setObjectName(u"Files")
         fileListWidget = QtWidgets.QWidget()
@@ -236,11 +222,10 @@ class MainWindow(QtWidgets.QMainWindow):
             if self._config[dock]["show"] is False:
                 getattr(self, dock).setVisible(False)
 
-        self.addDockWidget(Qt.RightDockWidgetArea, self.fillter_dock)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.flag_dock) #标记
-        self.addDockWidget(Qt.RightDockWidgetArea, self.label_dock)  #标签列表
-        self.addDockWidget(Qt.RightDockWidgetArea, self.shape_dock) #多边形标签
-        self.addDockWidget(Qt.RightDockWidgetArea, self.file_dock) #文件列表
+        self.addDockWidget(Qt.RightDockWidgetArea, self.flag_dock)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.label_dock)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.shape_dock)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.file_dock)
 
         # Actions
         action = functools.partial(utils.newAction, self)
@@ -282,15 +267,7 @@ class MainWindow(QtWidgets.QMainWindow):
             "dnn_predict",
             self.tr(u"dnn_predict"),
             enabled=False,
-        ) 
-        # fillter = action(
-        #     self.tr("&fillter"),
-        #     self.dnnPredict,
-        #     shortcuts["fillter"],
-        #     "fillter",
-        #     self.tr(u"fillter"),
-        #     enabled=False,
-        # )       
+        )        
         openPrevImg = action(
             self.tr("&Prev Image"),
             self.openPrevImg,
@@ -514,7 +491,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     "{},{}".format(shortcuts["zoom_in"], shortcuts["zoom_out"])
                 ),
                 utils.fmtShortcut(self.tr("Ctrl+Wheel")),
-                # utils.fmtShortcut(self.tr("Wheel")),
             )
         )
         self.zoomWidget.setEnabled(False)
@@ -651,24 +627,23 @@ class MainWindow(QtWidgets.QMainWindow):
             openNextImg=openNextImg,
             dnn_predict=dnn_predict,
             openPrevImg=openPrevImg,
-            fileMenuActions=(open_, opendir,  save, saveAs, close, quit), #菜单栏里 文件
+            fileMenuActions=(open_, opendir,  save, saveAs, close, quit),
             tool=(),
-            # XXX: need to add some actions here to activate the shortcut  
-            #editMenu 在菜单栏：编辑  里添加
+            # XXX: need to add some actions here to activate the shortcut
             editMenu=(
-                edit,  #编辑标签
-                copy, #复制多边形
-                delete, #删除多边形
+                edit,
+                copy,
+                delete,
                 None,
-                undo, #撤销
-                undoLastPoint, #撤销最后的控制点
+                undo,
+                undoLastPoint,
                 None,
-                addPointToEdge, #在边上加入控制点
+                addPointToEdge,
                 None,
-                toggle_keep_prev_mode, #保留最后的标注
-                tongleGrid, #grid tongle
+                toggle_keep_prev_mode,
+                tongleGrid,
             ),
-            # menu shown at right click  在画布上右键弹出的actions
+            # menu shown at right click
             menu=(
                 createMode,
                 createRectangleMode,
@@ -757,7 +732,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 brightnessContrast,
             ),
         )
-        
 
         self.menus.file.aboutToShow.connect(self.updateFileMenu)
 
@@ -774,7 +748,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tools = self.toolbar("Tools")
         # Menu buttons on Left
         self.actions.tool = (
-            # fillter,
+            
             dnn_predict,
             open_,
             opendir,
@@ -855,9 +829,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Callbacks:
         self.zoomWidget.valueChanged.connect(self.paintCanvas)
-        self.populateModeActions()
 
-        
+        self.populateModeActions()
 
         # self.firstStart = True
         # if self.firstStart:
@@ -881,8 +854,7 @@ class MainWindow(QtWidgets.QMainWindow):
         toolbar.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         if actions:
             utils.addActions(toolbar, actions)
-        # self.addToolBar(Qt.LeftToolBarArea, toolbar)
-        self.addToolBar(Qt.RightToolBarArea, toolbar)
+        self.addToolBar(Qt.LeftToolBarArea, toolbar)
         return toolbar
 
     # Support Functions
@@ -906,7 +878,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.actions.createLineStripMode,
             self.actions.editMode,
         )
-        utils.addActions(self.menus.edit, actions + self.actions.editMenu)  #在菜单栏编辑里 添加actions
+        utils.addActions(self.menus.edit, actions + self.actions.editMenu)
 
     def setDirty(self):
         if self._config["auto_save"] or self.actions.saveAuto.isChecked():
@@ -1185,11 +1157,6 @@ class MainWindow(QtWidgets.QMainWindow):
             text = "{} ({})".format(shape.label, shape.group_id)
         label_list_item = LabelListWidgetItem(text, shape)
         self.labelList.addItem(label_list_item)
-        if text != "person" and len(text.split("-")) == 3:
-            jlname = text.split("-")[1]
-            if jlname not in self.jldict:
-                self.jldict[jlname] =[]
-            self.jldict[jlname].append(label_list_item)
         if not self.uniqLabelList.findItemsByLabel(shape.label):
             item = self.uniqLabelList.createItemFromLabel(shape.label)
             self.uniqLabelList.addItem(item)
@@ -1370,13 +1337,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.canvas.deSelectShape()
 
     def labelItemChanged(self, item):
-        #这个地方可以将经络名保存在字典中，后面用于过滤功能
         shape = item.shape()
-        # if not shape.label == "person":
-        #     key = shape.label.split("-")[1]
-        #     if key not in self.jldict:
-        #         self.jldict[key] = []
-        #     self.jldict[key].append(shape)
         self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
 
     def labelOrderChanged(self):
@@ -1785,21 +1746,15 @@ class MainWindow(QtWidgets.QMainWindow):
         #         filename = self.imageList[currIndex + 1]
         #     else:
         #         filename = self.imageList[-1]
-        # modelName = self.modelsBox.currentText()
-        # shapes, keypoints0=self.dnnmodel.predict(self.filename, modelName)
-        # if not shapes is None:
-        #     self.loadNoneExistsShapes(shapes)
-        #     self.setDirty()
-        # else:
-        #     logging.error(f"predicted nothing for file:{filePath}")    
-        pass  
-    
-    def fillter(self):
-        pass
+        modelName = self.modelsBox.currentText()
+        shapes, keypoints0=self.dnnmodel.predict(self.filename, modelName)
+        if not shapes is None:
+            self.loadNoneExistsShapes(shapes)
+            self.setDirty()
+        else:
+            logging.error(f"predicted nothing for file:{filePath}")        
 
     def openNextImg(self, _value=False, load=True):
-        self.jldict = {}
-        self.listwidget.clear()
         keep_prev = self._config["keep_prev"]
         if Qt.KeyboardModifiers() == (Qt.ControlModifier | Qt.ShiftModifier):
             self._config["keep_prev"] = True
@@ -1825,54 +1780,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.loadFile(self.filename)
 
         self._config["keep_prev"] = keep_prev
-        for key in self.jldict.keys():
-            self.add_item_checkbox(key)
-            # qcb = QtWidgets.QCheckBox(key)
-            # qcb.setObjectName(key)
-            # qcb.setText(key)
-            # qcb.setChecked(True)
-            # # print(qcb.text())
-            # # print(qcb.objectName())
-            
-            # item = QtWidgets.QListWidgetItem()
-            # self.listwidget.addItem(item)
-            # self.listwidget.setItemWidget(item,qcb)
-            
-            # qcb.stateChanged.connect(functools.partial(self.process_chckbox,qcb.isChecked(),key))
-                
-        # self.listwidget.itemSelectionChanged.connect(self.process_chckbox)
-        # self.listwidget.itemChanged.connect(self.process_chckbox)
-        # self.listwidget.clicked.connect(self.process_chckbox)
-    def add_item_checkbox(self,key):
-
-        qcb = QtWidgets.QCheckBox(key)
-        qcb.setObjectName(key)
-        qcb.setText(key)
-        qcb.setChecked(True)
-        # print(qcb.text())
-        # print(qcb.objectName())
-        
-        item = QtWidgets.QListWidgetItem()
-        self.listwidget.addItem(item)
-        self.listwidget.setItemWidget(item,qcb)
-        qcb.stateChanged.connect(lambda:self.process_chckbox(qcb.isChecked(),key))
-        # qcb.stateChanged.connect(functools.partial(self.process_chckbox,qcb.isChecked(),key))
-
-    def process_chckbox(self,i,key):
-        """
-        通过过滤器，将整条经络过滤掉
-        """
-        # print("state is:" , i)
-        # print("text name: ",key)
-   
-        # print("hello world")   
-        for label_list_item in self.jldict[key]:
-            shape = label_list_item.shape()
-            self.canvas.setShapeVisible(shape, i)
-            label_list_item.setCheckState(Qt.Checked if i else Qt.Unchecked)
-            # self.canvas.repaint()
-            # self.canvas.
-            # self.labelItemChanged(label_list_item)
 
     def openFile(self, _value=False):
         if not self.mayContinue():
@@ -2101,7 +2008,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.endMove(copy=False)
         self.setDirty()
 
-    def openDirDialog(self, _value=False, dirpath="/911G/data/care_data"):
+    def openDirDialog(self, _value=False, dirpath="/911G/data"):
         if not os.path.exists(dirpath):
             dirpath = None
         if not self.mayContinue():
@@ -2126,7 +2033,6 @@ class MainWindow(QtWidgets.QMainWindow):
             )
         )
         self.importDirImages(targetDirPath)
-        
 
     @property
     def imageList(self):

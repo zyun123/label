@@ -76,6 +76,7 @@ shortcuts:
   delete_file: Ctrl+Delete
 
   dnn_predict: null
+  # dnn_predict: null
   open_next: [D, Ctrl+Shift+D]
   open_prev: [A, Ctrl+Shift+A]
 

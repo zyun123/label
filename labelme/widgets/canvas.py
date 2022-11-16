@@ -654,18 +654,19 @@ class Canvas(QtWidgets.QWidget):
         if (len(labels) == 0): 
             return
         for shape in self.shapes:
-            label = shape.label
-            font = self._painter.font()
-            # print("shezhi  zihao")  #set font size
-            font.setPixelSize(5)
-            p.setFont(font)
-            p.drawText(shape.points[0].x(),shape.points[0].y(),label)   #在每个关键点上drawtext
-            if label is None:
-                print('error', label ,"is None")
-                return
-            shapeNext,color = self.findNextShape(label, labels)
-            if shapeNext is not None:
-                self.drawLine(p, shape, shapeNext, color)
+            if self.visible[shape] == True:
+                label = shape.label
+                font = self._painter.font()
+                # print("shezhi  zihao")  #set font size
+                font.setPixelSize(5)
+                p.setFont(font)
+                p.drawText(shape.points[0].x(),shape.points[0].y(),label)   #在每个关键点上drawtext
+                if label is None:
+                    print('error', label ,"is None")
+                    return
+                shapeNext,color = self.findNextShape(label, labels)
+                if shapeNext is not None:
+                    self.drawLine(p, shape, shapeNext, color)
 
     def paintEvent(self, event):
         if not self.pixmap:
