@@ -1524,6 +1524,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.tongleGrid = not self.canvas.tongleGrid
         self.canvas.update()
     def loadFile(self, filename=None):
+        #在这儿清空jldict ，在filelist和nextimage中都调用了loadfile
+        self.jldict = {}
+        #每次打开新的标注文件，需要清空self.listwidget
+        self.listwidget.clear()
         """Load the specified file, or the last opened file if None."""
         # changing fileListWidget loads file
         if filename in self.imageList and (
@@ -1672,6 +1676,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addRecentFile(self.filename)
         self.toggleActions(True)
         self.status(self.tr("Loaded %s") % osp.basename(str(filename)))
+
+        #在jllistwidgets里添加checkbox
+        for key in self.jldict.keys():
+            self.add_item_checkbox(key)
         return True
 
     def resizeEvent(self, event):
@@ -1798,7 +1806,7 @@ class MainWindow(QtWidgets.QMainWindow):
         pass
 
     def openNextImg(self, _value=False, load=True):
-        self.jldict = {}
+        # self.jldict = {}
         self.listwidget.clear()
         keep_prev = self._config["keep_prev"]
         if Qt.KeyboardModifiers() == (Qt.ControlModifier | Qt.ShiftModifier):
@@ -1825,8 +1833,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.loadFile(self.filename)
 
         self._config["keep_prev"] = keep_prev
-        for key in self.jldict.keys():
-            self.add_item_checkbox(key)
+        # for key in self.jldict.keys():
+        #     self.add_item_checkbox(key)
             # qcb = QtWidgets.QCheckBox(key)
             # qcb.setObjectName(key)
             # qcb.setText(key)

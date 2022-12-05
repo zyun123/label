@@ -813,14 +813,27 @@ class Canvas(QtWidgets.QWidget):
         if QT5:
             mods = ev.modifiers()
             delta = ev.angleDelta()
+            """
+            原代码
             if QtCore.Qt.ControlModifier == int(mods):
                 # with Ctrl/Command key
-                # zoom
+                # zoom  ctrl+whell  ctrl键 +滚轮键 进行缩放
                 self.zoomRequest.emit(delta.y(), ev.pos())
             else:
-                # scroll
+                # scroll  滚轮键进行上下翻滚
                 self.scrollRequest.emit(delta.x(), QtCore.Qt.Horizontal)
                 self.scrollRequest.emit(delta.y(), QtCore.Qt.Vertical)
+            """
+            if QtCore.Qt.ControlModifier == int(mods):
+                # with Ctrl/Command key
+                # zoom  ctrl+whell  ctrl键 +滚轮键 进行缩放
+                
+                self.scrollRequest.emit(delta.x(), QtCore.Qt.Horizontal)
+                self.scrollRequest.emit(delta.y(), QtCore.Qt.Vertical)
+            else:
+                # scroll  滚轮键进行上下翻滚
+                self.zoomRequest.emit(delta.y(), ev.pos())
+                
         else:
             if ev.orientation() == QtCore.Qt.Vertical:
                 mods = ev.modifiers()
