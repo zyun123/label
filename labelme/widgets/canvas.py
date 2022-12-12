@@ -622,6 +622,7 @@ class Canvas(QtWidgets.QWidget):
         lastNumber = int(labelsus[2])
         if labelsus[1] == "pangguang" and labelsus[2] == "17": #fillter kp
             # print("膀胱经17点过滤")
+            # print("膀胱经17点过滤")
             # print("asdfasdfasdf")
             labelNext = None
         else:
