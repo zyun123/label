@@ -10,7 +10,7 @@ from labelme.utils.buildKeypointNames import buildKeypointNames, g_palette
 import json
 def get_dataDict(json_path):
         '''得到json'内容'''
-        with open(json_path, 'r') as f:
+        with open(json_path, 'r',encoding = "utf-8") as f:
             dataDict = json.load(f)
             return dataDict
 
