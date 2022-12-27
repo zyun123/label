@@ -1,7 +1,7 @@
 import glob
 import os
 import json
-import cv2
+# import cv2
 import numpy as np
 class Comp2dir:
     def __init__(self,dir1, dir2,outdir, kpnames):

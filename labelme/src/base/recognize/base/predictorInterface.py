@@ -1,5 +1,5 @@
 from abc import ABCMeta, ABC, abstractmethod
-import cv2
+# import cv2
 import logging
 class PredictorInterface(ABC):
     @abstractmethod

@@ -7,6 +7,13 @@ from labelme import QT5
 from labelme.shape import Shape
 import labelme.utils
 from labelme.utils.buildKeypointNames import buildKeypointNames, g_palette
+import json
+def get_dataDict(json_path):
+        '''得到json'内容'''
+        with open(json_path, 'r') as f:
+            dataDict = json.load(f)
+            return dataDict
+
 
 # TODO(unknown):
 # - [maybe] Find optimal epsilon value.
@@ -79,6 +86,9 @@ class Canvas(QtWidgets.QWidget):
         self._painter = QtGui.QPainter()
         self._cursor = CURSOR_DEFAULT
         self.palette = g_palette
+
+        
+        self.jl_rules = get_dataDict("configs/jl_rules01.json")
 
         self.jingluoNames = ["shen","xinbao", "sanjiao", "dan", "gan", "fei", "dachang", "wei","pi", "xin", "xiaochang", "pangguang"]
         # Menus:
@@ -289,7 +299,7 @@ class Canvas(QtWidgets.QWidget):
         # - Highlight shapes
         # - Highlight vertex
         # Update shape/vertex fill and tooltip value accordingly.
-        self.setToolTip(self.tr("Image"))
+        # self.setToolTip(self.tr("Image"))
         for shape in reversed([s for s in self.shapes if self.isVisible(s)]):
             # Look for a nearby vertex to highlight. If that fails,
             # check if we happen to be inside a shape.
@@ -303,7 +313,10 @@ class Canvas(QtWidgets.QWidget):
                 self.prevhEdge = self.hEdge = index_edge
                 shape.highlightVertex(index, shape.MOVE_VERTEX)
                 self.overrideCursor(CURSOR_POINT)
-                self.setToolTip(shape.label)
+                if shape.label in self.jl_rules:
+                    self.setToolTip(self.jl_rules[shape.label])
+                else:
+                    self.setToolTip(shape.label)
                 self.setStatusTip(self.toolTip())
                 self.update()
                 break

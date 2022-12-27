@@ -3,7 +3,7 @@ import copy
 import logging
 import pickle
 import torch
-import cv2
+# import cv2
 import numpy as np
 from typing import Any, ClassVar, Dict, List
 
@@ -118,7 +118,7 @@ g_modelAccu
 
 if __name__ == "__main__":
     from src.gui.args import parse_args, load_args
-    import cv2
+    # import cv2
     args = parse_args()
     cfg, model, k = ["configs/kp_middle_down_wai_dachang_xiaochang_sanjiao_pangguang.yaml","/mnt/data/new_mergeDataToModel/models_middle_down_wai_dachang_sanjiao_xiaochang_paguang/model_final.pth", "detectron2"]
     predictor = KpPredictor(cfg, model, "left_gan")

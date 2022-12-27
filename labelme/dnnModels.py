@@ -1,7 +1,7 @@
 from abc import ABCMeta, ABC, abstractmethod
 import argparse
 import os
-import cv2
+# import cv2
 import numpy as np
 from argparse import ArgumentParser
 import logging as log

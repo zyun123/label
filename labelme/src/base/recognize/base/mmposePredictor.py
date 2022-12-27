@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Dict, List
 
 from labelme.src.base.recognize.base.predictorInterface import PredictorInterface
 import os
-import cv2
+# import cv2
 from argparse import ArgumentParser
 
 from mmdet.apis import inference_detector, init_detector

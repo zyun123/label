@@ -10,7 +10,7 @@ import logging
 from labelme.utils.buildKeypointNames import buildKeypointNames, drawKeypoints
 from pathlib import Path
 
-import cv2
+# import cv2
 import numpy as np
 class labelme2coco(object):
     def __init__(self, AllJingluoNames, labelme_json=[], save_json_path="./coco.json", thing_classes = None):
