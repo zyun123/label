@@ -8,11 +8,11 @@ import numpy as np
 from typing import Any, ClassVar, Dict, List
 
 from labelme.src.base.recognize.base.predictorInterface import PredictorInterface
-from detectron2.config import get_cfg
+# from detectron2.config import get_cfg
 
-from detectron2.data import MetadataCatalog
-from detectron2.engine.defaults import DefaultPredictor
-from detectron2.utils.visualizer import ColorMode, Visualizer
+# from detectron2.data import MetadataCatalog
+# from detectron2.engine.defaults import DefaultPredictor
+# from detectron2.utils.visualizer import ColorMode, Visualizer
 from labelme.utils.buildKeypointNames import buildKeypointNames, drawKeypoints
 from labelme.src.base.recognize.base.models_accuNames import g_modelAccu
 
