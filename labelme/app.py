@@ -31,11 +31,12 @@ from labelme.widgets import LabelListWidgetItem
 from labelme.widgets import ToolBar
 from labelme.widgets import UniqueLabelQListWidget
 from labelme.widgets import ZoomWidget
-from labelme.dnnModels import KeypointModel
-from labelme.src.base.recognize.composite.KpWholePart import KpWholePart
+# from labelme.dnnModels import KeypointModel
+# from labelme.src.base.recognize.composite.KpWholePart import KpWholePart
 
-from labelme.src.base.recognize.base.models_accuNames import Models_JingluoNames, g_modelAccu, g_jingluoDict, g_modelCfg
-from labelme.src.base.recognize.composite.modelsManager import ModelsManager
+# from labelme.src.base.recognize.base.models_accuNames import Models_JingluoNames, g_modelAccu, g_jingluoDict, g_modelCfg
+from labelme.src.base.recognize.base.models_accuNames import  g_modelCfg
+# from labelme.src.base.recognize.composite.modelsManager import ModelsManager
 # FIXME
 # - [medium] Set max zoom value to something big enough for FitWidth/Window
 
@@ -67,13 +68,13 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.fillComboBox()
         self.dnnmodel = None
         self.modeldir = "/home/sy/share/data/models/d2"
-        self.modelCfgs = Models_JingluoNames.getModelCfg()
-        self.modelAllCfgs = Models_JingluoNames.getModelAllCfg()
+        # self.modelCfgs = Models_JingluoNames.getModelCfg()
+        # self.modelAllCfgs = Models_JingluoNames.getModelAllCfg()
         
-        self.modelsManager = ModelsManager(self.modelCfgs, self.modeldir)
-        self.wholePart = KpWholePart(self.modelAllCfgs, self.modelsManager, 225)
-        self.wholePart.setUsePartModels(True)
-        self.dnnmodel = KeypointModel(self.wholePart, g_modelAccu)
+        # self.modelsManager = ModelsManager(self.modelCfgs, self.modeldir)
+        # self.wholePart = KpWholePart(self.modelAllCfgs, self.modelsManager, 225)
+        # self.wholePart.setUsePartModels(True)
+        # self.dnnmodel = KeypointModel(self.wholePart, g_modelAccu)
         if output is not None:
             logger.warning(
                 "argument output is deprecated, use output_file instead"
@@ -187,10 +188,11 @@ class MainWindow(QtWidgets.QMainWindow):
         fileListLayout.addWidget(self.fileListWidget)
 
         modelNames = [model for model in g_modelCfg]
-        # self.centralwidget = QtWidgets.QWidget(self)        
-        self.modelsBox = QtWidgets.QComboBox()
-        fileListLayout.addWidget(self.modelsBox)
-        self.modelsBox.addItems(modelNames)
+        # self.centralwidget = QtWidgets.QWidget(self)     
+        #    
+        # self.modelsBox = QtWidgets.QComboBox()
+        # fileListLayout.addWidget(self.modelsBox)
+        # self.modelsBox.addItems(modelNames)
 
         #labelme界面上文件列表
         self.file_dock = QtWidgets.QDockWidget(self.tr(u"File List"), self)

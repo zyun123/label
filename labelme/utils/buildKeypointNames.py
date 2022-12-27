@@ -1,4 +1,4 @@
-import cv2
+# import cv2
 import numpy as np
 import logging
 g_palette = np.array([[0, 128, 0], [230, 230, 0], [255, 0, 255],
