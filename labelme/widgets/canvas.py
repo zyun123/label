@@ -56,7 +56,7 @@ class Canvas(QtWidgets.QWidget):
         super(Canvas, self).__init__(*args, **kwargs)
         # Initialise local state.
         self.mode = self.EDIT
-        self.tongleGrid = False
+        self.tongleGrid = True
         self.shapes = []
         self.shapesBackups = []
         self.current = None
@@ -71,7 +71,7 @@ class Canvas(QtWidgets.QWidget):
         self.prevPoint = QtCore.QPoint()
         self.prevMovePoint = QtCore.QPoint()
         self.offsets = QtCore.QPoint(), QtCore.QPoint()
-        self.scale = 1.0
+        self.scale = 1
         self.pixmap = QtGui.QPixmap()
         self.visible = {}
         self._hideBackround = False
@@ -606,21 +606,21 @@ class Canvas(QtWidgets.QWidget):
         s= 1.0
         area = super(Canvas, self).size()
         w, h = self.pixmap.width() * s, self.pixmap.height() * s        
-        times = 40
+        times = (720,1280)
         if w <= 0 or h <= 0:
             return
-        for i in range(1 , times - 1):
+        for i in range(1 , times[1] - 1):
             #draw horizantal lines
             x0 = 0
-            y0 = h * i // times
-            x1 = w - 1
+            y0 = h * i*5 // times[0]
+            x1 = w - 10
             y1 = y0
             p.drawLine(x0, y0, x1, y1)
             #draw vertical lines
-            x0 = w * i // times
+            x0 = w * i*5 // times[1]
             y0 = 0
             x1 = x0
-            y1 = h - 1
+            y1 = h - 10
             p.drawLine(x0, y0, x1, y1)           
 
 
