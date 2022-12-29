@@ -2,7 +2,7 @@ import numpy as np
 from qtpy import QtCore
 from qtpy import QtGui
 from qtpy import QtWidgets
-
+import os
 from labelme import QT5
 from labelme.shape import Shape
 import labelme.utils
@@ -56,7 +56,7 @@ class Canvas(QtWidgets.QWidget):
         super(Canvas, self).__init__(*args, **kwargs)
         # Initialise local state.
         self.mode = self.EDIT
-        self.tongleGrid = True
+        self.tongleGrid = False
         self.shapes = []
         self.shapesBackups = []
         self.current = None
@@ -87,8 +87,9 @@ class Canvas(QtWidgets.QWidget):
         self._cursor = CURSOR_DEFAULT
         self.palette = g_palette
 
-        
-        self.jl_rules = get_dataDict("configs/jl_rules01.json")
+        root_path = cur_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        configs_path = os.path.join(os.path.dirname(root_path),"configs/jl_rules01.json")
+        self.jl_rules = get_dataDict(configs_path)
 
         self.jingluoNames = ["shen","xinbao", "sanjiao", "dan", "gan", "fei", "dachang", "wei","pi", "xin", "xiaochang", "pangguang"]
         # Menus:
@@ -294,6 +295,12 @@ class Canvas(QtWidgets.QWidget):
                 self.repaint()
                 self.movingShape = True
             return
+        
+        if QtCore.Qt.MiddleButton & ev.buttons():
+            print("mouse middle move!")
+            print(pos.x(),pos.y())
+            self.scrollRequest.emit(pos.x()-self.middle_pos.x(), QtCore.Qt.Horizontal)
+            self.scrollRequest.emit(pos.y()-self.middle_pos.y(), QtCore.Qt.Vertical)
 
         # Just hovering over the canvas, 2 possibilities:
         # - Highlight shapes
@@ -371,6 +378,7 @@ class Canvas(QtWidgets.QWidget):
         else:
             pos = self.transformPos(ev.posF())
         if ev.button() == QtCore.Qt.LeftButton:
+            print("left mouse button")
             if self.drawing():
                 if self.current:
                     # Add point to existing shape.
@@ -411,6 +419,9 @@ class Canvas(QtWidgets.QWidget):
             self.selectShapePoint(pos, multiple_selection_mode=group_mode)
             self.prevPoint = pos
             self.repaint()
+        elif ev.button() == QtCore.Qt.MiddleButton:
+            print("gun lun zhong jian")
+            self.middle_pos = pos
 
     def mouseReleaseEvent(self, ev):
         if ev.button() == QtCore.Qt.RightButton:
@@ -449,6 +460,7 @@ class Canvas(QtWidgets.QWidget):
                 self.shapeMoved.emit()
 
             self.movingShape = False
+        
 
     def endMove(self, copy):
         assert self.selectedShapes and self.selectedShapesCopy
@@ -606,21 +618,21 @@ class Canvas(QtWidgets.QWidget):
         s= 1.0
         area = super(Canvas, self).size()
         w, h = self.pixmap.width() * s, self.pixmap.height() * s        
-        times = (720,1280)
+        times = (w,h)
         if w <= 0 or h <= 0:
             return
-        for i in range(1 , times[1] - 1):
+        for i in range(1 , int(max(times)) - 1):
             #draw horizantal lines
             x0 = 0
-            y0 = h * i*5 // times[0]
-            x1 = w - 10
+            y0 = h * i*5 // times[1]
+            x1 = w - 1
             y1 = y0
             p.drawLine(x0, y0, x1, y1)
             #draw vertical lines
-            x0 = w * i*5 // times[1]
+            x0 = w * i*5 // times[0]
             y0 = 0
             x1 = x0
-            y1 = h - 10
+            y1 = h - 1
             p.drawLine(x0, y0, x1, y1)           
 
 
@@ -698,10 +710,15 @@ class Canvas(QtWidgets.QWidget):
         p.drawPixmap(0, 0, self.pixmap)
         Shape.scale = self.scale
         for shape in self.shapes:
+            
             if (shape.selected or not self._hideBackround) and self.isVisible(
                 shape
             ):
-                shape.fill = shape.selected or shape == self.hShape
+                # shape.fill = shape.selected or shape == self.hShape
+                shape.fill = False or shape == self.hShape
+                # if shape.label == "person":
+                #     shape.fill = False
+
                 shape.paint(p)
         if self.current:
             self.current.paint(p)
@@ -829,6 +846,7 @@ class Canvas(QtWidgets.QWidget):
             delta = ev.angleDelta()
             """
             原代码
+            
             if QtCore.Qt.ControlModifier == int(mods):
                 # with Ctrl/Command key
                 # zoom  ctrl+whell  ctrl键 +滚轮键 进行缩放
@@ -947,10 +965,10 @@ class Canvas(QtWidgets.QWidget):
         self.hShape = None
         self.hVertex = None
         self.hEdge = None
-        for shape in self.shapes:
-            if shape.label == 'person':
-                continue
-            self.setToolTip(shape.label)
+        # for shape in self.shapes:
+        #     if shape.label == 'person':
+        #         continue
+        #     self.setToolTip(shape.label)
         self.repaint()
 
     def setShapeVisible(self, shape, value):

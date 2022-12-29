@@ -1186,6 +1186,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             text = "{} ({})".format(shape.label, shape.group_id)
         label_list_item = LabelListWidgetItem(text, shape)
+        if text == "person":
+            label_list_item.setCheckState(Qt.Unchecked)
         self.labelList.addItem(label_list_item)
         if text != "person" and len(text.split("-")) == 3:
             jlname = text.split("-")[1]
@@ -2111,7 +2113,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.endMove(copy=False)
         self.setDirty()
 
-    def openDirDialog(self, _value=False, dirpath="/911G/data/care_data"):
+    def openDirDialog(self, _value=False, dirpath="/911G/data/temp/middle_up_nei/test"):
         if not os.path.exists(dirpath):
             dirpath = None
         if not self.mayContinue():
