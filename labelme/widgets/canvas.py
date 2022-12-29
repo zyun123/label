@@ -87,8 +87,8 @@ class Canvas(QtWidgets.QWidget):
         self._cursor = CURSOR_DEFAULT
         self.palette = g_palette
 
-        root_path = cur_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        configs_path = os.path.join(os.path.dirname(root_path),"configs/jl_rules01.json")
+        root_path= os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        configs_path = os.path.join(root_path,"config/jl_rules01.json")
         self.jl_rules = get_dataDict(configs_path)
 
         self.jingluoNames = ["shen","xinbao", "sanjiao", "dan", "gan", "fei", "dachang", "wei","pi", "xin", "xiaochang", "pangguang"]
