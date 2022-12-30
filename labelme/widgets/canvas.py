@@ -264,6 +264,7 @@ class Canvas(QtWidgets.QWidget):
                 self.line.points = [self.current[0], pos]
                 self.line.close()
             elif self.createMode == "point":
+                # print("最近的点:",self.current[0])
                 self.line.points = [self.current[0]]
                 self.line.close()
             self.repaint()
@@ -286,10 +287,12 @@ class Canvas(QtWidgets.QWidget):
         # Polygon/Vertex moving.
         if QtCore.Qt.LeftButton & ev.buttons():
             if self.selectedVertex():
+                # print("--------------")
                 self.boundedMoveVertex(pos)
                 self.repaint()
                 self.movingShape = True
             elif self.selectedShapes and self.prevPoint:
+                # print("移动目标")
                 self.overrideCursor(CURSOR_MOVE)
                 self.boundedMoveShapes(self.selectedShapes, pos)
                 self.repaint()
@@ -538,9 +541,11 @@ class Canvas(QtWidgets.QWidget):
 
     def boundedMoveVertex(self, pos):
         index, shape = self.hVertex, self.hShape
+        # print("index  ",index)
         point = shape[index]
         if self.outOfPixmap(pos):
             pos = self.intersectionPoint(point, pos)
+        # print("pos: {}, point: {}".format(pos,point))
         shape.moveVertexBy(index, pos - point)
 
     def boundedMoveShapes(self, shapes, pos):
@@ -680,7 +685,7 @@ class Canvas(QtWidgets.QWidget):
         if (len(labels) == 0): 
             return
         for shape in self.shapes:
-            if self.visible[shape] == True:
+            if shape in self.visible and self.visible[shape] == True:
                 label = shape.label
                 font = self._painter.font()
                 # print("shezhi  zihao")  #set font size

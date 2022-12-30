@@ -988,10 +988,15 @@ class MainWindow(QtWidgets.QMainWindow):
     # Callbacks
 
     def undoShapeEdit(self):
+        print("撤销")
         self.canvas.restoreShape()
-        self.labelList.clear()
+        # print("01")
+        self.labelList.clear()  
+        # print("02")
         self.loadShapes(self.canvas.shapes)
+        # print("03")
         self.actions.undo.setEnabled(self.canvas.isShapeRestorable)
+        # print("04")
 
     def tutorial(self):
         url = "https://github.com/wkentaro/labelme/tree/master/examples/tutorial"  # NOQA

@@ -168,8 +168,8 @@ def main():
     translator.load("zh_CN.qm", osp.dirname(osp.abspath(__file__)) + "/translate",)
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationName(__appname__)
-    # app.setWindowIcon(newIcon("icon"))
-    app.setWindowIcon(newIcon("maliao"))
+    app.setWindowIcon(newIcon("icon"))
+    # app.setWindowIcon(newIcon("maliao"))
     app.installTranslator(translator)
     win = MainWindow(
         config=config,
