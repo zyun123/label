@@ -11,7 +11,7 @@ a = Analysis(
     datas=[
         ('labelme\\translate\\*','translate'),
         ('labelme\\config\\default_config.yaml','labelme\\config'),
-        ('labelme\\config\\jl_rules.yaml','labelme\\config'),
+        ('labelme\\config\\jl_rules01.yaml','labelme\\config'),
     ],
     hiddenimports=[],
     hookspath=[],
