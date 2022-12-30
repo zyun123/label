@@ -35,7 +35,7 @@ from labelme.widgets import ZoomWidget
 # from labelme.src.base.recognize.composite.KpWholePart import KpWholePart
 
 # from labelme.src.base.recognize.base.models_accuNames import Models_JingluoNames, g_modelAccu, g_jingluoDict, g_modelCfg
-from labelme.src.base.recognize.base.models_accuNames import  g_modelCfg
+# from labelme.src.base.recognize.base.models_accuNames import  g_modelCfg
 # from labelme.src.base.recognize.composite.modelsManager import ModelsManager
 # FIXME
 # - [medium] Set max zoom value to something big enough for FitWidth/Window
@@ -63,7 +63,8 @@ class MainWindow(QtWidgets.QMainWindow):
         output_dir=None,
     ):
         self.jldict = {}
-
+        self.openDirName = None  #打开的目录名字
+        self.modelNames = ["middle_up_nei","middle_down_wai"]
         self.modelsBox = None
         # self.fillComboBox()
         self.dnnmodel = None
@@ -187,7 +188,8 @@ class MainWindow(QtWidgets.QMainWindow):
         fileListLayout.addWidget(self.fileSearch)
         fileListLayout.addWidget(self.fileListWidget)
 
-        modelNames = [model for model in g_modelCfg]
+        modelNames = self.modelNames
+        # modelNames = [model for model in g_modelCfg]
         # self.centralwidget = QtWidgets.QWidget(self)     
         #    
         # self.modelsBox = QtWidgets.QComboBox()
@@ -255,11 +257,11 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tr("Quit application"),
         )
         open_ = action(
-            self.tr("&Open"),
-            self.openFile,
-            shortcuts["open"],
-            "open",
-            self.tr("Open image or label file"),
+            self.tr("&Open"),  #QAction的objectname
+            self.openFile,   #对应的槽函数
+            shortcuts["open"], #快捷键
+            "open",   #icons  名称
+            self.tr("Open image or label file"),  #鼠标停留显示
         )
         opendir = action(
             self.tr("&Open Dir"),
@@ -277,22 +279,30 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tr(u"Open next (hold Ctl+Shift to copy labels)"),
             enabled=False,
         )
+        data_process = action(
+            self.tr("&数据预处理"),
+            self.dataProcess,
+            shortcuts["data_process"],
+            "data_process",
+            self.tr(u"data_process"),
+            enabled=True,
+        ) 
         dnn_predict = action(
-            self.tr("&Dnn predict"),
+            self.tr("&预标注"),
             self.dnnPredict,
             shortcuts["dnn_predict"],
             "dnn_predict",
             self.tr(u"dnn_predict"),
             enabled=False,
         ) 
-        # fillter = action(
-        #     self.tr("&fillter"),
-        #     self.dnnPredict,
-        #     shortcuts["fillter"],
-        #     "fillter",
-        #     self.tr(u"fillter"),
-        #     enabled=False,
-        # )       
+        d2_train = action(
+            self.tr("&训练"),
+            self.defaultTraining,
+            shortcuts["train"],
+            "train",
+            self.tr(u"train"),
+            enabled=True,
+        )       
         openPrevImg = action(
             self.tr("&Prev Image"),
             self.openPrevImg,
@@ -652,6 +662,8 @@ class MainWindow(QtWidgets.QMainWindow):
             zoomActions=zoomActions,
             openNextImg=openNextImg,
             dnn_predict=dnn_predict,
+            d2_train = d2_train,
+            data_process = data_process,
             openPrevImg=openPrevImg,
             fileMenuActions=(open_, opendir,  save, saveAs, close, quit), #菜单栏里 文件
             tool=(),
@@ -776,7 +788,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tools = self.toolbar("Tools")
         # Menu buttons on Left
         self.actions.tool = (
-            # fillter,
+            data_process,
+            d2_train,
             dnn_predict,
             open_,
             opendir,
@@ -790,7 +803,7 @@ class MainWindow(QtWidgets.QMainWindow):
             copy,
             delete,
             undo,
-            brightnessContrast,
+            # brightnessContrast,
             None,
             zoom,
             fitWidth,
@@ -1793,6 +1806,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self._config["keep_prev"] = keep_prev
     def dnnPredict(self):
+        open_dir_name = self.openDirName
         # filename = None
         # if self.filename is None:
         #     filename = self.imageList[0]
@@ -1811,7 +1825,11 @@ class MainWindow(QtWidgets.QMainWindow):
         #     logging.error(f"predicted nothing for file:{filePath}")    
         pass  
     
-    def fillter(self):
+    def defaultTraining(self):
+        print("developing")
+        pass
+    
+    def dataProcess(self):
         pass
 
     def openNextImg(self, _value=False, load=True):
@@ -2142,6 +2160,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 | QtWidgets.QFileDialog.DontResolveSymlinks,
             )
         )
+        self.openDirName = targetDirPath
+        print("选择的目录是:*******",targetDirPath)
         self.importDirImages(targetDirPath)
         
 
