@@ -610,7 +610,8 @@ class Canvas(QtWidgets.QWidget):
         
         pen = QtGui.QPen()
         pen.setWidth(0.001)
-        pen.setColor(QtGui.QColor('WhiteSmoke'))
+        # pen.setColor(QtGui.QColor('WhiteSmoke'))
+        pen.setColor(QtGui.QColor('darkblue'))
         pen.setStyle(QtCore.Qt.DotLine)
         p.setPen(pen)
 

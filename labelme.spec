@@ -1,45 +1,55 @@
-# -*- mode: python -*-
-# vim: ft=python
-
-import sys
+# -*- mode: python ; coding: utf-8 -*-
 
 
-sys.setrecursionlimit(5000)  # required on Windows
+block_cipher = None
 
 
 a = Analysis(
-    ['labelme/__main__.py'],
-    pathex=['labelme'],
+    ['labelme\\__main__.py'],
+    pathex=[],
     binaries=[],
     datas=[
-        ('labelme/config/default_config.yaml', 'labelme/config'),
-        ('labelme/icons/*', 'labelme/icons'),
-        ('labelme/config/jl_rules01.json', 'labelme/config'),
+        ("labelme/config/default_config.yaml","labelme/config"),
+        ("labelme/config/jl_rules01.json","labelme/config"),
+        ("labelme/translate/*","translate")
     ],
     hiddenimports=[],
     hookspath=[],
+    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data)
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
 exe = EXE(
     pyz,
     a.scripts,
+    [],
+    exclude_binaries=True,
+    name='labelme',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon=['labelme\\icons\\maliao.png'],
+)
+coll = COLLECT(
+    exe,
     a.binaries,
     a.zipfiles,
     a.datas,
-    name='labelme',
-    debug=False,
     strip=False,
     upx=True,
-    runtime_tmpdir=None,
-    console=False,
-    icon='labelme/icons/icon.ico',
-)
-app = BUNDLE(
-    exe,
-    name='Labelme.app',
-    icon='labelme/icons/icon.icns',
-    bundle_identifier=None,
-    info_plist={'NSHighResolutionCapable': 'True'},
+    upx_exclude=[],
+    name='labelme',
 )
